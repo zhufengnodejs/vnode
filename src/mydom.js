@@ -1,4 +1,4 @@
-const IS_NON_DIMENSIONAL = /acit|ex(?:s|g|n|p|$)|rph|ows|mnc|ntw|ine[ch]|zoo|^ord/i
+const $ = require('jquery')
 const keys = Object.keys
 
 function each(obj, fn) {
@@ -37,7 +37,6 @@ function eventProxy(e) {
  */
 export function setAttribute(node, name, value, isSvg) {
   if (name === 'className') name = 'class'
-
   if (name === 'key' || name === 'ref') {
     // ignore
   } else if (name === 'class' && !isSvg) {
@@ -62,11 +61,10 @@ export function setAttribute(node, name, value, isSvg) {
     const useCapture = name !== (name = name.replace(/Capture$/, ''))
     name = name.toLowerCase().substring(2)
     if (value) {
-      node.addEventListener(name, eventProxy, useCapture)
+        $(document).on('click', node, value)
     } else {
-      node.removeEventListener(name, eventProxy, useCapture)
+      node.removeEventListener(name, value, useCapture)
     }
-
     (node._listeners || (node._listeners = {}))[name] = value
   } else if (name !== 'list' && name !== 'type' && !isSvg && name in node) {
     setProperty(node, name, value == null ? '' : value)
@@ -83,34 +81,30 @@ export function setAttribute(node, name, value, isSvg) {
   }
 }
 
-function setAttributes(attributes, element, invoke) {
-  each(attributes, (attribute, name) => {
-    if (/^on[A-Z]/.test(name) && typeof attribute === 'function') {
-      setAttribute(element, name, (...argv) => invoke(attribute, ...argv))
+const setAttributes = (props, element) => {
+  each(props, (prop, name) => {
+    if (/^on[A-Z]/.test(name) && typeof prop === 'function') {
+      setAttribute(element, name, (...args) => prop(element, ...args))
     } else {
-      setAttribute(element, name, attribute)
+      setAttribute(element, name, prop)
     }
   })
 }
-
-export function createElement(node, isSVG, invoke) {
-  if (node.type === String) return document.createTextNode(node.value)
-
-  const element = isSVG || node.tag === 'svg'
-    ? document.createElementNS('http://www.w3.org/2000/svg', node.type)
-    : document.createElement(node.type)
-
-  if (node.attributes) {
-    setAttributes(node.attributes, element, invoke)
+/*
+* 利用dom节点实现创建组件
+*/
+export const createElement = ({ type, props }) => {
+  const element = document.createElement(type)
+  if (props) {
+    setAttributes(props, element)
   }
-
   return element
 }
 
-export function updateElement(node, element, invoke) {
+export function updateElement(node, element) {
   if (node.type === String) {
     element.nodeValue = node.value
   } else {
-    setAttributes(node.attributes, element, invoke)
+    setAttributes(node.props, element)
   }
 }

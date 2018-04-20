@@ -1,3 +1,4 @@
+const { updateElement } = require('./dom')
 const $ = require('jquery')
 const keys = Object.keys
 
@@ -6,14 +7,35 @@ function each(obj, fn) {
     fn(obj[k], k)
   })
 }
+let count = 0
 
 class VDom {
-  constructor(type, props, children) {
+  constructor(type, attributes, children) {
+    this._rootId = this.randomId(type)
     this.node = {
       type,
-      props,
+      attributes: {
+        ...attributes,
+        id: this._rootId,
+      },
       children,
     }
+  }
+
+  randomId(type) {
+    const id = ++count
+    return `${type}${id}`
+  }
+
+  getDOMNode() {
+    return document.getElementById(this._rootId)
+  }
+
+  replaceAttributes(attributes) {
+    updateElement({
+      ...this.node,
+      attributes,
+    }, this.getDOMNode())
   }
 }
 
