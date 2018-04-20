@@ -1,0 +1,15 @@
+{
+  "presets": [
+    "@babel/react",
+    "@babel/stage-0"
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-transform-react-jsx",
+      {
+        "pragma": "createVNode"
+      }
+    ],
+    "@babel/plugin-proposal-class-properties"
+  ]
+}
