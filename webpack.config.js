@@ -3,7 +3,7 @@ const path = require('path')
 
 const config = {
   entry: {
-    playground: './src/playground-vdom.js',
+    playground: './src/playground.js',
   },
   output: {
     filename: '[name].js',
