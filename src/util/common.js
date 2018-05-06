@@ -1,17 +1,16 @@
 const keys = Object.keys
 
-function each(obj, fn) {
+const each = (obj, fn) => {
   return keys(obj).forEach((k) => {
     fn(obj[k], k)
   })
 }
 
-function mixinToClass(originClass, spec) {
+const mixinToClass = (originClass, spec) => {
   each(spec, (value, key) => {
     originClass.prototype[key] = value
   })
 }
-
 
 const reduce = (obj, handler, initial = {}) => keys(obj).reduce((last, key, index) => handler(last, obj[key], key, index), initial)
 
@@ -35,11 +34,11 @@ const unzip = obj => [keys(obj), values(obj)]
 
 const invert = obj => reduce(obj, (last, value, key) => ({ ...last, [value]: key }))
 
-// 萃取
 const omit = (obj, names) => filter(obj, (value, key) => !names.includes(key))
 
 export {
   each,
   mixinToClass,
   omit,
+  reduce,
 }

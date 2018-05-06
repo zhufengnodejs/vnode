@@ -6,16 +6,15 @@ class AntViewCompositeComponent extends AntViewComponent {
     super(props, children)
   }
 
-
   mountComponent(rootID) {
-    this.component = this.render()
-    return this.component ? this.component.mountComponent(rootID) : null
+    this.currentComponent = this.render()
+    return this.currentComponent ? this.currentComponent.mountComponent(rootID) : null
   }
 
-  updateComponent(props) {
-
+  updateComponent(nextComponent) {
+    this.nextComponent = nextComponent.render()
+    this.currentComponent.updateComponent(this.nextComponent)
   }
 }
-
 
 export default AntViewCompositeComponent

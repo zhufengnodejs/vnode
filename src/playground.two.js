@@ -27,17 +27,31 @@ const Example = AntView.createClass({
     // alert(1)
   },
   render() {
-    const { user, list = []} = this.props
-    return <div>
-      <ExampleChildren user={user} />
-      <ExampleEmpty />
+    const { user, list = [] } = this.props
+    return list.length === 3 ? <div style={{ color: 'red' }}>
+      <ExampleChildren user={user}/>
       {
-        list.map(item => <div>{item}</div>)
+        list.map(item => <div key={item} className="animated slideInRight">{item}</div>)
       }
-      <div onClick={this.onClick}>test</div>
-    </div>
+      <div key="a" className="animated slideInRight">a</div>
+      <div key="b" className="animated slideInRight">b</div>
+      <div key="c" className="animated slideInRight">c</div>
+      <div key="d" className="animated slideInRight">d</div>
+      <div key="x" className="animated slideInRight">x</div>
+    </div> : <div>
+        <ExampleChildren user={user}/>
+        {
+          list.map(item => <div key={item}>{item}</div>)
+        }
+        <div key="a" className="animated slideInRight">a</div>
+        <div key="z" className="animated slideInRight">z</div>
+        <div key="d" className="animated slideInRight">d</div>
+        <div key="c" className="animated slideInRight">c</div>
+      </div>
   }
 })
 
-AntViewDOM.render(<Example user={user1} list={[1,2,3]} />, document.getElementById('root'))
-// AntViewDOM.render(<Example user={user2} />, document.getElementById('root'))
+AntViewDOM.render(<Example user={user1} list={[1, 2, 3]} />, document.getElementById('root'))
+setTimeout(() => {
+  AntViewDOM.render(<Example user={user2} list={[3, 1]} />, document.getElementById('root'))
+}, 1000)

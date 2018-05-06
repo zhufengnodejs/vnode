@@ -1,16 +1,18 @@
+import { registerContainer, compareComponent } from './AntViewDOMUtils'
+
 const instanceID = {};
 
-let globalMountPointCounter = 0
+const render = function (nextComponent, container) {
+  const rootID = registerContainer(container)
+  const preComponent = instanceID[rootID]
 
-const registerContainer = function () {
-  return `root[${globalMountPointCounter++}]`
-}
-
-const render = (virtualComponent, container) => {
-  const rootID = registerContainer(container);
-  const element = virtualComponent.mountComponent(rootID)
-  instanceID[rootID] = element 
-  container.innerHTML = element.innerHTML
+  if (preComponent && compareComponent(preComponent, nextComponent)) {
+    preComponent.updateComponent(nextComponent)
+  } else {
+    const element = nextComponent.mountComponent(rootID)
+    instanceID[rootID] = nextComponent
+    container.innerHTML = element.outerHTML
+  }
 }
 
 export default {
