@@ -3,7 +3,8 @@ const path = require('path')
 
 const config = {
   entry: {
-    playground: './src/playground.js',
+    ['playground.two']: './src/playground.two.js',
+    ['playground.one']: './src/playground.one.js',
   },
   output: {
     filename: '[name].js',

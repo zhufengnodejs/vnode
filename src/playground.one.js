@@ -1,5 +1,5 @@
 const { createElement, updateElement } = require('./util/dom')
-const { createVNode } = require('./vdom')
+const { createVNode } = require('./temp/vdom.one')
 
 class Render {
   constructor(vnode, dom) {
@@ -36,7 +36,6 @@ class Render {
 const user1 = { name: 'zhangsan', href: 'http://www.baidu.com', link: 'link1', hello: 'hello world 1' }
 const user2 = { name: 'lisi', href: 'http://www.taobao.com', link: 'link2', hello: 'hello world 2' }
 const user3 = { name: 'lisi', href: 'http://www.taobao.com', link: 'link2', hello: 'hello world 2', flag: 'true' }
-
 const App = ({ user }) => {
   return (user.flag !== 'true' ? <div id="wrapper"
     onClick={(context) => {

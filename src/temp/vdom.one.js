@@ -1,5 +1,5 @@
-const { each } = require('./util/common')
-const { createElement, updateElement } = require('./util/dom')
+const { each } = require('../util/common')
+const { createElement, updateElement } = require('../util/dom')
 const $ = require('jquery')
 
 const STRING = 'string'
